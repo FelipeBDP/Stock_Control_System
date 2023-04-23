@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserLoginControllerTest {
+class UserLoginControllerTest {
 
     @InjectMocks //Injetar os valores no controler
     UserLoginController userLoginController;

@@ -15,6 +15,7 @@ import java.util.UUID;
 public  class StockSituationServiceImpl implements StockSituationService{
 
     private final StockSituationRepository stockSituationRepository;
+
     @Transactional
     public StockSituationEntity addStock(StockSituationEntity stockSituationEntity){
        return stockSituationRepository.save(stockSituationEntity);

@@ -12,6 +12,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import stock.control.entity.StockSituationEntity;
 import stock.control.service.StockSituationService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StockSituationControllerTest{
+class StockSituationControllerTest{
+
    @InjectMocks
     StockSituationController stockSituationController;
 
@@ -41,7 +45,23 @@ public class StockSituationControllerTest{
         ResponseEntity<Object> responseEntity = stockSituationController.addSituation(stockSituation);
         assertThat(responseEntity.getBody()).isEqualTo(stockSituation);
     }
+    @Test
+    public void testFindAll() {
+        UUID id = UUID.fromString("39a9e55c-6636-46e2-963f-ac0d1c7d7d05");
+        var stockSituation = new StockSituationEntity();
+        stockSituation.setStock("BBAS3");
+        stockSituation.setRegistrationDate(null);
+        stockSituation.setId(id);
 
+        List<StockSituationEntity> stocks = new ArrayList<>();
+        stocks.add(stockSituation);
+
+        when(stockSituationService.listAllStock()).thenReturn(stocks);
+        ResponseEntity<List<StockSituationEntity>> responseEntity = stockSituationController.listStock();
+
+        assertThat(Objects.requireNonNull(responseEntity.getBody()).get(0).getStock()).isEqualTo(stockSituation.getStock());
+
+    }
     @Test
     public void testRemoveStockSituation() {
         UUID id = UUID.fromString("39a9e55c-6636-46e2-963f-ac0d1c7d7d05");
