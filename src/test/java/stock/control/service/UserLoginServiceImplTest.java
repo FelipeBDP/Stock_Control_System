@@ -10,11 +10,14 @@ import stock.control.entity.UserLoginEntity;
 import stock.control.repository.UserLoginRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -26,54 +29,56 @@ class UserLoginServiceImplTest {
     UserLoginRepository userLoginRepository;
 
    @Test
-    void should_save_one_student() {
-        // Arrange
+    void should_save() {
 
         var  userLoginEntity = getUserLogin();
 
         when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginEntity);
 
-        // Act
         final var actual = userLoginService.createUserLogin(userLoginEntity);
 
-        // Assert
         assertThat(actual).usingRecursiveComparison().isEqualTo(userLoginEntity);
     }
 
+    @Test
+    void should_find() {
 
-   /*
-    @Test
-    public void testFindById() {
-        Employee employee = getEmployee();
-        employeeRepository.save(employee);
-        Employee result = employeeRepository.findById(employee.getId()).get();
-        assertEquals(employee.getId(), result.getId());
-    }
-    @Test
-    public void testFindAll() {
-        Employee employee = getEmployee();
-        employeeRepository.save(employee);
-        List<Employee> result = new ArrayList<>();
-        employeeRepository.findAll().forEach(e -> result.add(e));
-        assertEquals(result.size(), 1);
-    }
-    @Test
-    public void testSave() {
-        Employee employee = getEmployee();
-        employeeRepository.save(employee);
-        Employee found = employeeRepository.findById(employee.getId()).get();
-        assertEquals(employee.getId(), found.getId());
-    }
-    @Test
-    public void testDeleteById() {
-        Employee employee = getEmployee();
-        employeeRepository.save(employee);
-        employeeRepository.deleteById(employee.getId());
-        List<Employee> result = new ArrayList<>();
-        employeeRepository.findAll().forEach(e -> result.add(e));
-        assertEquals(result.size(), 0);
-    }*/
+        var  userLoginEntity = getUserLogin();
 
+        when(userLoginRepository.findById(any())).thenReturn(Optional.of(userLoginEntity));
+
+        // Act
+        final var actual = userLoginService.listUser(userLoginEntity.getId());
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(Optional.of(userLoginEntity));
+    }
+
+    @Test
+    void should_find_one_userlogin() {
+
+        var  userLoginEntity = getUserLogin();
+
+        List<UserLoginEntity> userLogin = new ArrayList<>();
+        userLogin.add(userLoginEntity);
+
+        when(userLoginRepository.findAll()).thenReturn(userLogin);
+
+        final var actual = userLoginService.listAllUser();
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(userLogin);
+    }
+
+   @Test
+    void should_delete_one_userlogin() {
+
+       UUID id = UUID.fromString("39a9e55c-6636-46e2-963f-ac0d1c7d7d05");
+
+       doNothing().when(userLoginRepository).deleteById(any());
+
+       userLoginService.deleteUserLogin(id);
+        verify(userLoginRepository, times(1)).deleteById(any());
+        verifyNoMoreInteractions(userLoginRepository);
+    }
 
     private UserLoginEntity getUserLogin(){
         UUID id = UUID.fromString("39a9e55c-6636-46e2-963f-ac0d1c7d7d05");

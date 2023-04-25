@@ -100,6 +100,20 @@ class UserLoginControllerTest {
 
     }
 
+    @Test
+    public void testRemoveUserLoginfind() {
+
+        var userLogin = getUserLogin();
+
+        userLoginService.deleteUserLogin(userLogin.getId());
+
+        verify(userLoginService, times(1)).deleteUserLogin(userLogin.getId());
+        ResponseEntity<Object> responseEntity = userLoginController.deleteUserLogin(userLogin.getId());
+
+        assert(responseEntity.getStatusCode().isSameCodeAs(HttpStatus.OK));
+
+    }
+
     private UserLoginEntity getUserLogin(){
         UUID id = UUID.fromString("39a9e55c-6636-46e2-963f-ac0d1c7d7d05");
         LocalDateTime Date = LocalDateTime.now();
