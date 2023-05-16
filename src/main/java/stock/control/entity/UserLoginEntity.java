@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @Table(name = "TB_USER_LOGIN")
 @Entity
-public class UserLoginEntity  implements Serializable { // The data is serialize
+public class UserLoginEntity implements Serializable { // The data is serialize
 
    @Serial
    private static final long serialVersionUID = 1L; // I use to start ID
